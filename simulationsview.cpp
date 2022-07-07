@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "simulationsview.h"
 #include "ui_simulationsview.h"
-#include "opencv/cv.h"
+#include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include "mirrordlg.h"
 #include "zernikeprocess.h"
@@ -262,9 +262,9 @@ cv::Mat fitStarTest(cv::Mat img, int size, double gamma){
     cv::Mat tmp;
     cv::pow(img,gamma,img);
     //showData("fff", img.clone(), false);
-    normalize(img, img,0,255,CV_MINMAX);
+    normalize(img, img,0,255,cv::NORM_MINMAX);
     img.convertTo(tmp,CV_8U);
-    cvtColor(tmp,tmp, CV_GRAY2RGB);
+    cvtColor(tmp,tmp, cv::COLOR_GRAY2RGB);
     cv::Mat t = tmp(cv::Rect(offset,offset,2 * ee, 2 * ee));
     cv::resize(t,t,cv::Size(size,size),0,0,cv::INTER_AREA);
     cv::flip(t,t,0);

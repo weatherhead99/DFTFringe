@@ -44,8 +44,11 @@ OGLView::OGLView(QWidget *parent, ContourTools *m_tool,
 {
 
     QSettings s;
-    Q3DSurface *graph = new Q3DSurface();
-    m_surface = new SurfaceGraph(graph);
+    Q3DSurface *graph = new Q3DSurface;
+    //    Q3DSurface graph;
+
+ 
+   m_surface = new SurfaceGraph(graph);
     m_container = QWidget::createWindowContainer(graph);
 
     if (!graph->hasContext()) {
@@ -54,6 +57,8 @@ OGLView::OGLView(QWidget *parent, ContourTools *m_tool,
         msgBox.exec();
         return;
     }
+
+    qDebug() << "OGL here";
     m_container->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_container->setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -100,6 +105,9 @@ OGLView::OGLView(QWidget *parent, ContourTools *m_tool,
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showContextMenu(QPoint)));
+
+    qDebug() << "end of OGL setup";
+    
 }
 OGLView::~OGLView(){
     m_controls->close();

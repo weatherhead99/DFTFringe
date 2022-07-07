@@ -33,12 +33,12 @@
 #include "simigramdlg.h"
 #include "usercolormapdlg.h"
 #include <qlayout.h>
-#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 #include "simulationsview.h"
 #include "outlinehelpdocwidget.h"
 #include "bathastigdlg.h"
 #include "settingsigram.h"
-#include "Circleoutline.h"
+#include "circleoutline.h"
 #include "cameracalibwizard.h"
 #include "astigstatsdlg.h"
 #include "astigscatterplot.h"
@@ -145,13 +145,21 @@ const QString toolButtonStyle("QToolButton {"
 
     m_contourView = new contourView(this, m_contourTools);
     connect(m_contourView, SIGNAL(zoomMe(bool)),this, SLOT(zoomContour(bool)));
+
+
+    
     m_ogl = new OGLView(0, m_contourTools, m_surfTools);
     connect(m_ogl, SIGNAL(fullScreen()), this, SLOT(zoomOgl()));
 
     connect(userMapDlg, SIGNAL(colorMapChanged(int)), m_contourView->getPlot(), SLOT(ContourMapColorChanged(int)));
+
+    qDebug() << "here2";
     //connect(userMapDlg, SIGNAL(colorMapChanged(int)),m_ogl->m_gl, SLOT(colorMapChanged(int)));
     review = new reviewWindow(this);
+
     review->s1->addWidget(m_ogl);
+
+
 
     m_profilePlot =  new ProfilePlot(review->s2,m_contourTools);
     connect(m_profilePlot, SIGNAL(zoomMe(bool)), this, SLOT(zoomProfile(bool)));
@@ -1081,8 +1089,9 @@ void MainWindow::batchProcess(QStringList fileList){
 #ifdef Q_OS_WIN
         Sleep(uint(1000));
 #else
-        struct timespec ts = { 1000 / 1000, (ms % 1000) * 1000 * 1000 };
-        nanosleep(&ts, NULL);
+	//        struct timespec ts = { 1000 / 1000, (ms % 1000) * 1000 * 1000 };
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	//        nanosleep(&ts, NULL);
 #endif
         ui->SelectOutSideOutline->setChecked(true);
         if (!batchIgramWizard::autoCb->isChecked()){
@@ -1103,8 +1112,10 @@ void MainWindow::batchProcess(QStringList fileList){
 #ifdef Q_OS_WIN
         Sleep(uint(1000));
 #else
-        struct timespec ts = { 1000 / 1000, (ms % 1000) * 1000 * 1000 };
-        nanosleep(&ts, NULL);
+	//already declared above!
+	//        struct timespec ts = { 1000 / 1000, (ms % 1000) * 1000 * 1000 };
+	//        nanosleep(&ts, NULL);
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 #endif
         m_batchMakeSurfaceReady = false;
         if (!batchIgramWizard::autoCb->isChecked() && !m_skipItem){
@@ -1144,7 +1155,15 @@ void MainWindow::batchProcess(QStringList fileList){
 
             m_surfaceManager->deleteCurrent();
             if (shouldBeep)
+	      {
+		//this seems to be windows only functionality
+#ifdef Q_OS_WIN
                 Beep(300,250);
+#else
+		QApplication::beep();
+#endif
+
+	      }
         }
         else{
             QPointF astig(wf->InputZerns[4], wf->InputZerns[5]);

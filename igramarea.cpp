@@ -21,14 +21,15 @@
 #include <QPrintDialog>
 #endif
 
-#include "IgramArea.h"
-#include "Circleoutline.h"
+#include "igramarea.h"
+#include "circleoutline.h"
 #include <QtGlobal>
 #include <math.h>
 
-#include "opencv/cv.h"
-#include "opencv2/imgproc.hpp"
-#include "opencv2/features2d.hpp"
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
+#include <opencv2/imgproc/types_c.h>
 #include "graphicsutilities.h"
 #include <iostream>
 #include <fstream>
@@ -195,6 +196,7 @@ void IgramArea::DrawSimIgram(void){
     double rad = xcen-border;
     cv::Mat simgram = makeSurfaceFromZerns(border, true);
     cv::flip(simgram,simgram,0);
+    //   cv::cvtColor(simgram, simgram, CV_BGRA2RGBA);
     cv::cvtColor(simgram, simgram, CV_BGRA2RGBA);
     igramColor = QImage((uchar*)simgram.data,
                         simgram.cols,
@@ -459,7 +461,8 @@ cv::Point2d IgramArea::findBestOutsideOutline(cv::Mat gray, int start, int end,i
     double rmeanpeak = 0;
     double avg;
     if (showDebug){
-        cv::namedWindow("outline debug",CV_WINDOW_NORMAL);
+      cv::namedWindow("outline debug", cv::WindowFlags::WINDOW_NORMAL);
+      //        cv::namedWindow("outline debug",CV_WINDOW_NORMAL);
         cv::moveWindow("outline debug", 10,10);
     }
     double oldDel;
@@ -632,7 +635,8 @@ void IgramArea::findCenterHole(){
 
     // phase 2 search for full size hole
     if (showDebug){
-        cv::namedWindow("outline debug",CV_WINDOW_NORMAL);
+      cv::namedWindow("outline debug", cv::WindowFlags::WINDOW_NORMAL);
+      //  cv::namedWindow("outline debug",CV_WINDOW_NORMAL);
         cv::moveWindow("outline debug", 10,10);
     }
     QVector<QPointF> points;
@@ -981,6 +985,7 @@ bool IgramArea::openImage(const QString &fileName, bool autoOutside, bool showBo
         loadedImage = loadedImage.convertToFormat(QImage::Format_RGB888);
 
     if (Settings2::getInstance()->m_igram->m_removeDistortion){
+
         cv::Mat raw = imread(fileName.toStdString().c_str());
         QStringList parms = Settings2::getInstance()->m_igram->m_lenseParms;
         Mat camera = Mat::zeros(3,3,CV_64FC1);

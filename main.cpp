@@ -27,34 +27,38 @@
 int main(int argc, char *argv[])
 {    // Allow secondary instances
 
-    SingleApplication app( argc, argv, true );
+    // SingleApplication app( argc, argv, true );
 
-    MessageReceiver msgReceiver;
+    // MessageReceiver msgReceiver;
 
-    // If this is a secondary instance
-    if( app.isSecondary() ) {
-        app.sendMessage( app.arguments().join('\'').toUtf8() );
-        return 0;
-    } else {
-        QObject::connect(
-            &app,
-            &SingleApplication::receivedMessage,
-            &msgReceiver,
-            &MessageReceiver::receivedMessage
-        );
-    }
+    // // If this is a secondary instance
+    // if( app.isSecondary() ) {
+    //     app.sendMessage( app.arguments().join('\'').toUtf8() );
+    //     return 0;
+    // } else {
+    //     QObject::connect(
+    //         &app,
+    //         &SingleApplication::receivedMessage,
+    //         &msgReceiver,
+    //         &MessageReceiver::receivedMessage
+    //     );
+    // }
 
 
-
+    QApplication app(argc, argv);
     app.setOrganizationName("DFTFringe");
     app.setApplicationName("DFTFringe");
     MainWindow *w = new MainWindow;
-    msgReceiver.m_mainWindow = w;
+
+    qDebug() << "mainWindow constructed";
+    //    msgReceiver.m_mainWindow = w;
 
 #if defined(_WIN32)
     //showmem();
 #endif
     w->show();
+
+    qDebug() << "about to exec";
     //fclose(logptr);
     return app.exec();
 }

@@ -65,8 +65,12 @@
 #include <QtCore>
 #include <QtGui>
 #include <QLabel>
-#include <qscrollarea>
-#include "Circleoutline.h"
+
+//note: linux port, don't think this is needed
+//#include <qscrollarea>
+
+//note:linux port, upper case lower case etc
+#include "circleoutline.h"
 #include <list>
 
 #include <opencv2/core/core.hpp>

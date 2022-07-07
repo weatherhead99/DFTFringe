@@ -20,6 +20,8 @@ QT += datavisualization
 TARGET = DFTFringe
 TEMPLATE = app
 
+
+
 CONFIG += ``
 
 SOURCES += main.cpp\
@@ -27,8 +29,8 @@ SOURCES += main.cpp\
     igramarea.cpp \
     circleoutline.cpp \
     gplus.cpp \
-    Boundary.cpp \
-    graphicsutilities.cpp \
+    Boundary.cpp \ 
+   graphicsutilities.cpp \
     dfttools.cpp \
     dftarea.cpp \
     mikespsirinterface.cpp \
@@ -333,23 +335,24 @@ win32 {
 }
 
 
-INCLUDEPATH += D:\armadillo\armadillo-9.200.6\include
+# INCLUDEPATH += D:\armadillo\armadillo-9.200.6\include
 
-INCLUDEPATH += D:\opencv\opencv-3.4.12\build\install\include
+#INCLUDEPATH += D:\opencv\opencv-3.4.12\build\install\include
 
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_core3412.dll
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_highgui3412.dll
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_imgcodecs3412.dll
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_imgproc3412.dll
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_features2d3412.dll
-LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_calib3d3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_core3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_highgui3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_imgcodecs3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_imgproc3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_features2d3412.dll
+#LIBS += D:\opencv\opencv-3.4.12\build\bin\libopencv_calib3d3412.dll
 
 
-LIBS += D:\armadillo\bin\libarmadillo.dll
-LIBS += D:\lapack\build64\bin\liblapack.dll
-LIBS += D:\lapack\build64\bin\libblas.dll
+#LIBS += D:\armadillo\bin\libarmadillo.dll
+#LIBS += D:\lapack\build64\bin\liblapack.dll
+#LIBS += D:\lapack\build64\bin\libblas.dll
 unix {
-     INCLUDEPATH += /usr/include/qwt
+INCLUDEPATH += /usr/include/qwt
+INCLUDEPATH += /usr/include/qt5/qwt6
      iLIBS += -lqwt-qt5
      LIBS += -lopencv_core
      LIBS += -lopencv_imgproc
@@ -357,17 +360,27 @@ unix {
      LIBS += -lGLU
      LIBS += -lopencv_calib3d
      LIBS += -lopencv_features2d
+     LIBS += -lopencv_imgcodecs
+     LIBS += -lqwt
+     LIBS += -larmadillo
      message("using linux")
      contains(CONFIG,debug) { message("no extra debug libraries") }
+
+     QMAKE_CXXFLAGS += -Wno-deprecated-declarations -g 
 }
 
 OTHER_FILES += \
     todo.txt
 
+
+    
+    
+    
 RESOURCES += \
     DFTResources.qrc
 RC_FILE = DFTFringe.rc
-QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++14
+
 
 # The application version
 VERSION = 5.1

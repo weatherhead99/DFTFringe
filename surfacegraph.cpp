@@ -46,8 +46,14 @@ const float sampleMax = 8.0f;
 #include <QOpenGLFunctions>
 SurfaceGraph::SurfaceGraph(Q3DSurface *surface)
     : m_graph(surface),m_axisMaxSliderXValue(100),m_axisMinSliderXValue(0), m_wf(0), m_colorRange(.56)
+//      : m_axisMaxSliderXValue(100),m_axisMinSliderXValue(0), m_wf(0), m_colorRange(.56)
 {
     m_xGridMin = 0;
+
+
+    
+    //NOTE: segfault happens here somehow. Don't think this is needed if the axes are anonymous,
+    //defaults should be
     m_graph->setAxisX(new QValue3DAxis);
     m_graph->setAxisY(new QValue3DAxis);
     m_graph->setAxisZ(new QValue3DAxis);

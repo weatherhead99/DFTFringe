@@ -200,7 +200,7 @@ void SingleApplicationPrivate::connectToPrimary( int msecs, char connectionType 
         signal( SIGABRT, SingleApplicationPrivate::terminate ); // 6
         signal( SIGFPE,  SingleApplicationPrivate::terminate ); // 8
         signal( SIGBUS,  SingleApplicationPrivate::terminate ); // 10
-        signal( SIGSEGV, SingleApplicationPrivate::terminate ); // 11
+	//        signal( SIGSEGV, SingleApplicationPrivate::terminate ); // 11
         signal( SIGSYS,  SingleApplicationPrivate::terminate ); // 12
         signal( SIGPIPE, SingleApplicationPrivate::terminate ); // 13
         signal( SIGALRM, SingleApplicationPrivate::terminate ); // 14

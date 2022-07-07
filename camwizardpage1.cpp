@@ -4,7 +4,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 #include <QImageReader>
 #include <QFileDialog>
 #include <vector>
@@ -93,7 +93,7 @@ double computeReprojectionErrors( const std::vector<std::vector<cv::Point3f> >& 
     {
         projectPoints( cv::Mat(objectPoints[i]), rvecs[i], tvecs[i], cameraMatrix,
                        distCoeffs, imagePoints2);
-        err = cv::norm(cv::Mat(imagePoints[i]), cv::Mat(imagePoints2), CV_L2);
+        err = cv::norm(cv::Mat(imagePoints[i]), cv::Mat(imagePoints2), cv::NORM_L2);
 
         int n = (int)objectPoints[i].size();
         perViewErrors[i] = (float) std::sqrt(err*err/n);
@@ -122,9 +122,9 @@ bool CamWizardPage1::runCalibration( cv::Size& imageSize, cv::Mat& cameraMatrix,
 
     //Find intrinsic and extrinsic camera parameters
     double rms = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix,
-                                 distCoeffs, rvecs, tvecs, CV_CALIB_ZERO_TANGENT_DIST|
-                                 CV_CALIB_FIX_PRINCIPAL_POINT|CV_CALIB_FIX_ASPECT_RATIO|
-                                 CV_CALIB_FIX_K4|CV_CALIB_FIX_K5);
+                                 distCoeffs, rvecs, tvecs,CALIB_ZERO_TANGENT_DIST|
+                                 CALIB_FIX_PRINCIPAL_POINT|CALIB_FIX_ASPECT_RATIO|
+                                 CALIB_FIX_K4|CALIB_FIX_K5);
 
     ui->Results->append( "\nRe-projection error reported by calibrateCamera: " + QString().number( rms) + "\n");
 
@@ -219,7 +219,7 @@ void CamWizardPage1::on_compute_clicked()
         bool found = false;
         if (ui->useCircleGrid->isChecked()){
             cv::Mat gray;
-            cvtColor(view, gray, CV_BGR2GRAY);
+            cvtColor(view, gray, cv::COLOR_BGR2GRAY);
             //cv::threshold(gray,gray, 200, 255, cv::THRESH_BINARY);
             cv::Mat dial;
             cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT,
@@ -281,7 +281,7 @@ void CamWizardPage1::on_compute_clicked()
                 qApp->processEvents();
                 pointBuf.clear();
                 found = cv::findChessboardCorners( viewGray.clone(), sizex, pointBuf,
-                CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FAST_CHECK | CV_CALIB_CB_NORMALIZE_IMAGE);
+                CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_FAST_CHECK | CALIB_CB_NORMALIZE_IMAGE);
                 if (found){
                     size = sizex;
                     ui->columns->setValue(size.width);
@@ -301,7 +301,7 @@ void CamWizardPage1::on_compute_clicked()
             // improve the found corners' coordinate accuracy for chessboard
             if (found){
                 cv::cornerSubPix( viewGray, pointBuf, cv::Size(11,11),
-                                  cv::Size(-1,-1), cv::TermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 30, 0.1 ));
+                                  cv::Size(-1,-1), cv::TermCriteria( cv::TermCriteria::EPS+cv::TermCriteria::MAX_ITER, 30, 0.1 ));
             }
         }
 

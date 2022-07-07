@@ -101,6 +101,8 @@ std::cout <<" main2";
     ui->plot->plotLayout()->setAlignCanvasToScales( true );
     setColorMap();
 
+
+
 }
 
 void userColorMapDlg::setColorMap(){

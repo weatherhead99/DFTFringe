@@ -327,9 +327,9 @@ void showData(const std::string& txt, cv::Mat mat, bool useLog){
         log(tmp, tmp);
     }
     cv::namedWindow(txt, WINDOW_NORMAL);
-    normalize(tmp, tmp,0,255,CV_MINMAX);
+    normalize(tmp, tmp,0,255,cv::NORM_MINMAX);
     tmp.convertTo(tmp,CV_8U);
-    cvtColor(tmp,tmp, CV_GRAY2RGB);
+    cvtColor(tmp,tmp, cv::COLOR_GRAY2RGB);
     cv::imshow(txt, tmp);
     cv::waitKey(1);
 }
@@ -353,12 +353,12 @@ QImage  showMag(cv::Mat complexI, bool show, const char* title, bool doLog, doub
     if (gamma != 0.){
         cv::pow(magI,gamma,magI);
     }
-    normalize(magI, magI,0,255,CV_MINMAX, CV_8U);
+    normalize(magI, magI,0,255,cv::NORM_MINMAX, CV_8U);
     minMaxIdx(magI, &mmin,&mmax);
 
     cv::Mat tmp = magI.clone();
     cv::waitKey(1);
-    cvtColor(magI,magI, CV_GRAY2RGB);
+    cvtColor(magI,magI, cv::COLOR_GRAY2RGB);
     if (show){
         imshow(title, magI);
         waitKey(1);
@@ -484,6 +484,11 @@ void qg_path_follower_vortex (Size size, double *phase, double *qmap,
   // Repeat while still elements to unwrap (handles disjoint regions).
   while (1) {
 
+#ifndef Q_OS_WINDOWS
+    
+    auto HUGE = std::numeric_limits<double>::max();
+
+#endif
     // Find the point of highest quality.
     double m = -HUGE;
     int mndx;
@@ -816,7 +821,7 @@ cv::Mat DFTArea::vortex(QImage &img, double low)
     phase = tmp.clone();
     if (m_vortexDebugTool->m_showWrapped){
         cv::Mat tt = phase.clone();
-        cv::normalize(tt,tt,0.f,1.f,CV_MINMAX);
+        cv::normalize(tt,tt,0.f,1.f,cv::NORM_MINMAX);
         cv::imshow(" wrapped ", tt);
         cv::waitKey(1);
     }
@@ -871,7 +876,7 @@ cv::Mat_<double> subtractPlane(cv::Mat_<double> phase, cv::Mat_<bool> mask){
             }
         }
     }
-    cv::solve(X,Z,coeff,CV_SVD);
+    cv::solve(X,Z,coeff,cv::DecompTypes::DECOMP_SVD);
     // plane generation, Z = Ax + By + C
     // distance calculation d = Ax + By - z + C / sqrt(A^2 + B^2 + C^2)
 
@@ -927,7 +932,7 @@ void DFTArea::makeSurface(){
     phase.copyTo(result, m_mask);
     phase = result.clone();
 
-    normalize(phase, phase,0,1.,CV_MINMAX, numType,m_mask);
+    normalize(phase, phase,0,1.,cv::NORM_MINMAX, numType,m_mask);
 
 
     cv::Mat mask = m_mask.clone();
@@ -1449,7 +1454,7 @@ for (int i = 0; i < 100; ++i){
         //qDebug() << "phase "<< phase.cols << phase.rows << m_mask.rows << m_mask.cols;
         //showData("phase",phase.clone());
         //cv::Mat mask = m_mask.clone();
-        normalize(phase, phase,0,1.,CV_MINMAX, -1,mask);
+        normalize(phase, phase,0,1.,cv::NORM_MINMAX, -1,mask);
 
         cv::Mat mask2 = mask.clone();
         mask2 = (255 - mask2)/255;

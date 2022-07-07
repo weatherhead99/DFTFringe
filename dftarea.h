@@ -19,9 +19,13 @@
 #define DFTAREA_H
 
 #include <QWidget>
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
-#include "IgramArea.h"
+
+//note, new opencv doesn't include this anymore
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+
+//note: linux port, upper case lower case
+#include "igramarea.h"
 #include "dfttools.h"
 #include <QImage>
 #include "vortexdebug.h"

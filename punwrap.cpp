@@ -116,6 +116,10 @@ void qg_path_follower (int nx, int ny, double *phase, double *qmap,
     while (1) {
 
         // Find the point of highest quality.
+#ifndef Q_OS_WIN
+      auto HUGE = std::numeric_limits<double>::max();
+#endif
+      
         double m = -HUGE;
         int mndx;
         for (int k=0; k < size; ++k)
